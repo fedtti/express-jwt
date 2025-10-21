@@ -1,11 +1,11 @@
 import * as jwt from 'jsonwebtoken';
 import * as express from 'express';
-import { expressjwt, ExpressJwtRequest } from '../src';
+import { expressjwt, type Request } from '../src';
 import * as assert from 'assert';
 
 
 describe('string tokens', function () {
-  const req = {} as ExpressJwtRequest<string>;
+  const req = {} as Request;
   const res = {} as express.Response;
 
   it('should work with a valid string token', function (done) {

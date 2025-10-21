@@ -1,10 +1,10 @@
 import * as jwt from 'jsonwebtoken';
 import * as express from 'express';
-import { expressjwt, ExpressJwtRequest, GetVerificationKey } from '../src';
 import * as assert from 'assert';
+import { expressjwt, type Request, type GetVerificationKey } from '../src';
 
 describe('multitenancy', function () {
-  const req = {} as ExpressJwtRequest;
+  const req = {} as Request;
   const res = {} as express.Response;
 
   const tenants = {
@@ -14,8 +14,8 @@ describe('multitenancy', function () {
   };
 
   const secretCallback: GetVerificationKey = function (req, token) {
-    const issuer = (token.payload as jwt.JwtPayload).iss;
-    if (tenants[issuer]) {
+    const issuer = (token!.payload as jwt.JwtPayload).iss;
+    if (!!tenants[issuer]) {
       return tenants[issuer].secret;
     }
     throw new Error('Could not find secret for issuer.');
@@ -33,7 +33,7 @@ describe('multitenancy', function () {
     req.headers.authorization = 'Bearer ' + token;
 
     middleware(req, res, function () {
-      assert.equal(req.auth.foo, 'bar');
+      assert.equal(req.auth!.foo, 'bar');
       done();
     });
   });
@@ -70,4 +70,3 @@ describe('multitenancy', function () {
     });
   });
 });
-

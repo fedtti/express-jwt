@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as jwt from 'jsonwebtoken';
 import * as express from 'express';
-import { expressjwt, UnauthorizedError, Request, GetVerificationKey } from '../src';
+import { expressjwt, type UnauthorizedError, type Request, type GetVerificationKey } from '../src';
 import * as assert from 'assert';
 
 
 describe('failure tests', function () {
-  const req = {} as express.Request;
+  const req = {} as Request;
   const res = {} as express.Response;
 
   it('should throw if options not sent', function () {
@@ -15,6 +15,7 @@ describe('failure tests', function () {
       expressjwt();
     } catch (e) {
       assert.ok(e);
+      // @ts-ignore
       assert.equal(e.message, "express-jwt: `secret` is a required option");
     }
   });
@@ -25,6 +26,7 @@ describe('failure tests', function () {
       expressjwt({ secret: 'shhhh' });
     } catch (e) {
       assert.ok(e);
+      // @ts-ignore
       assert.equal(e.message, 'express-jwt: `algorithms` is a required option');
     }
   });
@@ -35,6 +37,7 @@ describe('failure tests', function () {
       expressjwt({ secret: 'shhhh', algorithms: 'foo' });
     } catch (e) {
       assert.ok(e);
+      // @ts-ignore
       assert.equal(e.message, 'express-jwt: `algorithms` must be an array');
     }
   });
@@ -377,7 +380,7 @@ describe('work tests', function () {
     req.query = {};
     req.query.token = token;
 
-    function getTokenFromQuery(req) {
+    function getTokenFromQuery(req: any) {
       return req.query.token;
     }
 
@@ -401,7 +404,7 @@ describe('work tests', function () {
     req.query = {};
     req.query.token = token;
 
-    function getTokenFromQuery(req) {
+    function getTokenFromQuery(req: any) {
       return Promise.resolve(req.query.token);
     }
 

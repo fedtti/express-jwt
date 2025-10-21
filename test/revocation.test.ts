@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import * as express from 'express';
-import { expressjwt, ExpressJwtRequest } from '../src';
+import { expressjwt, Request } from '../src';
 import * as assert from 'assert';
 
 describe('revoked jwts', function () {
@@ -19,7 +19,7 @@ describe('revoked jwts', function () {
   });
 
   it('should throw if token is revoked', function () {
-    const req = {} as ExpressJwtRequest;
+    const req = {} as Request;
     const res = {} as express.Response;
 
     const token = jwt.sign({ jti: revoked_id, foo: 'bar' }, secret);
@@ -35,7 +35,7 @@ describe('revoked jwts', function () {
   });
 
   it('should work if token is not revoked', function () {
-    const req = {} as ExpressJwtRequest;
+    const req = {} as Request;
     const res = {} as express.Response;
 
     const token = jwt.sign({ jti: '1233', foo: 'bar' }, secret);
@@ -44,12 +44,12 @@ describe('revoked jwts', function () {
     req.headers.authorization = 'Bearer ' + token;
 
     middleware(req, res, function () {
-      assert.equal(req.auth.foo, 'bar');
+      assert.equal(req.auth!.foo, 'bar');
     });
   });
 
   it('should throw if error occurs checking if token is revoked', function (done) {
-    const req = {} as ExpressJwtRequest;
+    const req = {} as Request;
     const res = {} as express.Response;
 
     const token = jwt.sign({ jti: revoked_id, foo: 'bar' }, secret);
