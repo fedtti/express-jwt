@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as jwt from 'jsonwebtoken';
 import * as express from 'express';
-import { expressjwt, type UnauthorizedError, type Request, type GetVerificationKey } from '../src';
+import { expressjwt, UnauthorizedError, type Request, type GetVerificationKey } from '../src';
 import * as assert from 'assert';
 
 
@@ -11,33 +11,27 @@ describe('failure tests', function () {
 
   it('should throw if options not sent', function () {
     try {
-      // @ts-ignore
       expressjwt();
     } catch (e) {
       assert.ok(e);
-      // @ts-ignore
       assert.equal(e.message, "express-jwt: `secret` is a required option");
     }
   });
 
   it('should throw if algorithms is not sent', function () {
     try {
-      // @ts-ignore
       expressjwt({ secret: 'shhhh' });
     } catch (e) {
       assert.ok(e);
-      // @ts-ignore
       assert.equal(e.message, 'express-jwt: `algorithms` is a required option');
     }
   });
 
   it('should throw if algorithms is not an array', function () {
     try {
-      // @ts-ignore
       expressjwt({ secret: 'shhhh', algorithms: 'foo' });
     } catch (e) {
       assert.ok(e);
-      // @ts-ignore
       assert.equal(e.message, 'express-jwt: `algorithms` must be an array');
     }
   });
@@ -280,9 +274,6 @@ describe('failure tests', function () {
 });
 
 describe('work tests', function () {
-  // var req = {} as express.Request;
-  // var res = {} as express.Response;
-
   it('should work if authorization header is valid jwt', function (done) {
     const secret = 'shhhhhh';
     const token = jwt.sign({ foo: 'bar' }, secret);
@@ -380,7 +371,7 @@ describe('work tests', function () {
     req.query = {};
     req.query.token = token;
 
-    function getTokenFromQuery(req: any) {
+    function getTokenFromQuery(req: Request) {
       return req.query.token;
     }
 
@@ -404,7 +395,7 @@ describe('work tests', function () {
     req.query = {};
     req.query.token = token;
 
-    function getTokenFromQuery(req: any) {
+    function getTokenFromQuery(req: Request) {
       return Promise.resolve(req.query.token);
     }
 

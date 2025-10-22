@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
-import * as express from 'express';
-import * as assert from 'assert';
+import express from 'express';
+import assert from 'assert';
 import { expressjwt, type Request, type GetVerificationKey } from '../src';
 
 describe('multitenancy', function () {
@@ -15,7 +15,7 @@ describe('multitenancy', function () {
 
   const secretCallback: GetVerificationKey = function (req, token) {
     const issuer = (token!.payload as jwt.JwtPayload).iss;
-    if (!!tenants[issuer]) {
+    if (tenants[issuer]) {
       return tenants[issuer].secret;
     }
     throw new Error('Could not find secret for issuer.');
